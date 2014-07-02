@@ -14,7 +14,7 @@ A very simple service for working with [UUIDs](http://en.wikipedia.org/wiki/Univ
 [Documentation](http://jasonturim.wordpress.com/2013/09/01/angularjs-drag-and-drop/)
 
 ## Changes in this fork
-The [https://github.com/logicbomb/lvlDragDrop](original repo) doesn't seem to get updates, so I've added my changes and
+The [original repo](https://github.com/logicbomb/lvlDragDrop) doesn't seem to get updates, so I've added my changes and
 fixes to my own fork.
 
 * Clean up code (indentation, semicolons)
@@ -22,4 +22,4 @@ fixes to my own fork.
 * Added the ability to disable drag and drop: `<div lvl-draggable="{{ authentication.isAdmin() }}"></div>`
 
 ### Install this fork
-bower install https://github.com/kevinrenskers/lvlDragDrop.git --save
+`bower install https://github.com/kevinrenskers/lvlDragDrop.git --save`
