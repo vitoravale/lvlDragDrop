@@ -22,4 +22,4 @@ fixes to my own fork.
 * Added the ability to disable drag and drop: `<div lvl-draggable="{{ authentication.isAdmin() }}"></div>`
 
 ### Install this fork
-bower install https://github.com/kevinrenskers/lvlDragDrop --save
+bower install https://github.com/kevinrenskers/lvlDragDrop.git --save
