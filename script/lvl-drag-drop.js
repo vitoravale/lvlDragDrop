@@ -4,25 +4,27 @@ module.directive('lvlDraggable', ['$rootScope', 'uuid', function($rootScope, uui
     return {
         restrict: 'A',
         link: function(scope, el, attrs, controller) {
-            if (attrs['lvlDraggable'] === 'true') {
-                angular.element(el).attr("draggable", "true");
-
-                var id = angular.element(el).attr("id");
-                if (!id) {
-                    id = uuid.new();
-                    angular.element(el).attr("id", id);
-                }
-
-                el.bind("dragstart", function(e) {
-                    e.dataTransfer.setData('text', id);
-
-                    $rootScope.$emit("LVL-DRAG-START");
-                });
-
-                el.bind("dragend", function(e) {
-                    $rootScope.$emit("LVL-DRAG-END");
-                });
+            if (attrs['lvlDraggable'] === 'false') {
+                return;
             }
+
+            angular.element(el).attr("draggable", "true");
+
+            var id = angular.element(el).attr("id");
+            if (!id) {
+                id = uuid.new();
+                angular.element(el).attr("id", id);
+            }
+
+            el.bind("dragstart", function(e) {
+                e.dataTransfer.setData('text', id);
+
+                $rootScope.$emit("LVL-DRAG-START");
+            });
+
+            el.bind("dragend", function(e) {
+                $rootScope.$emit("LVL-DRAG-END");
+            });
         }
     }
 }]);
@@ -34,6 +36,10 @@ module.directive('lvlDropTarget', ['$rootScope', 'uuid', function($rootScope, uu
             onDrop: '&'
         },
         link: function(scope, el, attrs, controller) {
+            if (attrs['lvlDropTarget'] === 'false') {
+                return;
+            }
+            
             var id = angular.element(el).attr("id");
             if (!id) {
                 id = uuid.new();
