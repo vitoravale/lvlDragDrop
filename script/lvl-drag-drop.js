@@ -74,7 +74,7 @@ module.directive('lvlDropTarget', ['$rootScope', 'uuid', function($rootScope, uu
                 }
 
                 var data = e.dataTransfer.getData("text");
-                scope.onDrop({dragEl: data, dropEl: id});
+                scope.onDrop({dragEl: data, dropEl: id, event: e});
             });
 
             $rootScope.$on("LVL-DRAG-START", function() {
