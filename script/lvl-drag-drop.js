@@ -31,6 +31,49 @@ module.directive('lvlDraggable', ['$rootScope', 'uuid', function($rootScope, uui
                 el.removeClass('lvl-dragging');
                 $rootScope.$emit("LVL-DRAG-END");
             });
+
+            el.bind("dragover", function(e) {
+                if (e.preventDefault) {
+                    e.preventDefault(); // Necessary. Allows us to drop.
+                }
+
+                e.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
+                return false;
+            });
+
+            el.bind("drop", function(e) {
+                if (e.preventDefault) {
+                    e.preventDefault(); // Necessary. Allows us to drop.
+                }
+
+                if (e.stopPropagation) {
+                    e.stopPropagation(); // Necessary. Allows us to drop.
+                }
+
+                if ('elementFromPoint' in document) {
+                    el.addClass('ng-hide');
+                    var underneath = document.elementFromPoint(e.clientX, e.clientY);
+                    el.removeClass('ng-hide');
+
+                    Object.defineProperty(e, 'target', {
+                        value: underneath,
+                        writable: true,
+                        configurable: true,
+                        enumerable: true
+                    });
+                    Object.defineProperty(e, 'currentTarget', {
+                        value: underneath,
+                        writable: true,
+                        configurable: true,
+                        enumerable: true
+                    });
+
+                    var fn = angular.element(underneath).data('lvlDropHandler');
+                    if (typeof fn === 'function') {
+                        fn(e);
+                    }
+                }
+            });
         }
     }
 }]);
@@ -70,7 +113,7 @@ module.directive('lvlDropTarget', ['$rootScope', 'uuid', function($rootScope, uu
                 angular.element(e.target).removeClass('lvl-over');  // this / e.target is previous target element.
             });
 
-            el.bind("drop", function(e) {
+            var dropHandler = function(e) {
                 if (e.preventDefault) {
                     e.preventDefault(); // Necessary. Allows us to drop.
                 }
@@ -81,7 +124,10 @@ module.directive('lvlDropTarget', ['$rootScope', 'uuid', function($rootScope, uu
 
                 var data = e.dataTransfer.getData("text");
                 scope.onDrop({dragEl: data, dropEl: id, event: e});
-            });
+            };
+
+            el.bind("drop", dropHandler);
+            el.data('lvlDropHandler', dropHandler);
 
             $rootScope.$on("LVL-DRAG-START", function() {
                 var el = document.getElementById(id);
