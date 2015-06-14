@@ -19,10 +19,16 @@ module.directive('lvlDraggable', ['$rootScope', 'uuid', function($rootScope, uui
             el.bind("dragstart", function(e) {
                 e.dataTransfer.setData('text', id);
 
+                if (e.stopPropagation) {
+                    e.stopPropagation();
+                }
+
+                el.addClass('lvl-dragging');
                 $rootScope.$emit("LVL-DRAG-START");
             });
 
             el.bind("dragend", function(e) {
+                el.removeClass('lvl-dragging');
                 $rootScope.$emit("LVL-DRAG-END");
             });
         }
@@ -39,7 +45,7 @@ module.directive('lvlDropTarget', ['$rootScope', 'uuid', function($rootScope, uu
             if (attrs['lvlDropTarget'] === 'false') {
                 return;
             }
-            
+
             var id = angular.element(el).attr("id");
             if (!id) {
                 id = uuid.new();
