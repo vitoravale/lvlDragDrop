@@ -22,6 +22,7 @@ and fixes to my own fork.
 * Added the ability to disable drag and drop: `<div lvl-draggable="{{ authentication.isAdmin() }}"></div>`
 * Fixed AngularJS 1.3 compatibility by returning id's instead of elements
 * Fixed a big memory leak
+* Add a `lvl-dragging` class to the element while it's being dragged
 
 ### Install this fork
 `bower install https://github.com/kevinrenskers/lvlDragDrop.git --save`
