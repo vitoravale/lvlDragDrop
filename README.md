@@ -21,6 +21,7 @@ and fixes to my own fork.
 * Fixed bower.json to include the required lvl-uuid.js as well
 * Added the ability to disable drag and drop: `<div lvl-draggable="{{ authentication.isAdmin() }}"></div>`
 * Fixed AngularJS 1.3 compatibility by returning id's instead of elements
+* Fixed a big memory leak
 
 ### Install this fork
 `bower install https://github.com/kevinrenskers/lvlDragDrop.git --save`
