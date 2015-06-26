@@ -77,15 +77,20 @@ module.directive('lvlDropTarget', ['$rootScope', 'uuid', function($rootScope, uu
                 scope.onDrop({dragEl: data, dropEl: id, event: e});
             });
 
-            $rootScope.$on("LVL-DRAG-START", function() {
+            var dragStartListener = $rootScope.$on("LVL-DRAG-START", function() {
                 var el = document.getElementById(id);
                 angular.element(el).addClass("lvl-target");
             });
 
-            $rootScope.$on("LVL-DRAG-END", function() {
+            var dragEndListener = $rootScope.$on("LVL-DRAG-END", function() {
                 var el = document.getElementById(id);
                 angular.element(el).removeClass("lvl-target");
                 angular.element(el).removeClass("lvl-over");
+            });
+
+            scope.$on('$destroy', function() {
+                dragStartListener();
+                dragEndListener();
             });
         }
     }
