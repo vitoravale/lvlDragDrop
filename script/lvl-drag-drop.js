@@ -51,9 +51,9 @@ module.directive('lvlDraggable', ['$rootScope', 'uuid', function($rootScope, uui
                 }
 
                 if ('elementFromPoint' in document) {
-                    el.addClass('ng-hide');
+                    el.addClass('pointer-events-none');
                     var underneath = document.elementFromPoint(e.clientX, e.clientY);
-                    el.removeClass('ng-hide');
+                    el.removeClass('pointer-events-none');
 
                     Object.defineProperty(e, 'target', {
                         value: underneath,
