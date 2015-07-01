@@ -41,39 +41,41 @@ module.directive('lvlDraggable', ['$rootScope', 'uuid', function($rootScope, uui
                 return false;
             });
 
-            el.bind("drop", function(e) {
-                if (e.preventDefault) {
-                    e.preventDefault(); // Necessary. Allows us to drop.
-                }
-
-                if (e.stopPropagation) {
-                    e.stopPropagation(); // Necessary. Allows us to drop.
-                }
-
-                if ('elementFromPoint' in document) {
-                    el.addClass('pointer-events-none');
-                    var underneath = document.elementFromPoint(e.clientX, e.clientY);
-                    el.removeClass('pointer-events-none');
-
-                    Object.defineProperty(e, 'target', {
-                        value: underneath,
-                        writable: true,
-                        configurable: true,
-                        enumerable: true
-                    });
-                    Object.defineProperty(e, 'currentTarget', {
-                        value: underneath,
-                        writable: true,
-                        configurable: true,
-                        enumerable: true
-                    });
-
-                    var fn = angular.element(underneath).data('lvlDropHandler');
-                    if (typeof fn === 'function') {
-                        fn(e);
+            if (attrs['lvlCaptureDrop'] === 'true') {
+                el.bind("drop", function(e) {
+                    if (e.preventDefault) {
+                        e.preventDefault(); // Necessary. Allows us to drop.
                     }
-                }
-            });
+
+                    if (e.stopPropagation) {
+                        e.stopPropagation(); // Necessary. Allows us to drop.
+                    }
+
+                    if ('elementFromPoint' in document) {
+                        el.addClass('pointer-events-none');
+                        var underneath = document.elementFromPoint(e.clientX, e.clientY);
+                        el.removeClass('pointer-events-none');
+
+                        Object.defineProperty(e, 'target', {
+                            value: underneath,
+                            writable: true,
+                            configurable: true,
+                            enumerable: true
+                        });
+                        Object.defineProperty(e, 'currentTarget', {
+                            value: underneath,
+                            writable: true,
+                            configurable: true,
+                            enumerable: true
+                        });
+
+                        var fn = angular.element(underneath).data('lvlDropHandler');
+                        if (typeof fn === 'function') {
+                            fn(e);
+                        }
+                    }
+                });
+            }
         }
     }
 }]);
