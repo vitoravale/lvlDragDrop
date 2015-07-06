@@ -4,7 +4,7 @@ module.directive('lvlDraggable', ['$rootScope', 'uuid', function($rootScope, uui
     return {
         restrict: 'A',
         link: function(scope, el, attrs) {
-            if (attrs['lvlDraggable'] === 'false') {
+            if (attrs.lvlDraggable === 'false') {
                 return;
             }
 
@@ -27,7 +27,7 @@ module.directive('lvlDraggable', ['$rootScope', 'uuid', function($rootScope, uui
                 $rootScope.$emit('LVL-DRAG-START');
             });
 
-            el.bind('dragend', function(e) {
+            el.bind('dragend', function() {
                 el.removeClass('lvl-dragging');
                 $rootScope.$emit('LVL-DRAG-END');
             });
@@ -41,7 +41,7 @@ module.directive('lvlDraggable', ['$rootScope', 'uuid', function($rootScope, uui
                 return false;
             });
 
-            if (attrs['lvlCaptureDrop'] === 'true') {
+            if (attrs.lvlCaptureDrop === 'true') {
                 el.bind('drop', function(e) {
                     if (e.preventDefault) {
                         e.preventDefault(); // Necessary. Allows us to drop.
@@ -70,14 +70,14 @@ module.directive('lvlDraggable', ['$rootScope', 'uuid', function($rootScope, uui
                         });
 
                         var fn = angular.element(underneath).data('lvlDropHandler');
-                        if (typeof fn === 'function') {
+                        if (angular.isFunction(fn)) {
                             fn(e);
                         }
                     }
                 });
             }
         }
-    }
+    };
 }]);
 
 module.directive('lvlDropTarget', ['$rootScope', 'uuid', function($rootScope, uuid) {
@@ -86,8 +86,8 @@ module.directive('lvlDropTarget', ['$rootScope', 'uuid', function($rootScope, uu
         scope: {
             onDrop: '&'
         },
-        link: function(scope, el, attrs, controller) {
-            if (attrs['lvlDropTarget'] === 'false') {
+        link: function(scope, el, attrs) {
+            if (attrs.lvlDropTarget === 'false') {
                 return;
             }
 
@@ -147,5 +147,5 @@ module.directive('lvlDropTarget', ['$rootScope', 'uuid', function($rootScope, uu
                 dragEndListener();
             });
         }
-    }
+    };
 }]);
