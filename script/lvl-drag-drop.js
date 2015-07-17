@@ -1,6 +1,6 @@
-var module = angular.module('lvl.directives.dragdrop', ['lvl.services']);
+angular.module('lvl.directives.dragdrop', ['lvl.services']);
 
-module.directive('lvlDraggable', ['$rootScope', 'uuid', function($rootScope, uuid) {
+angular.module('lvl.directives.dragdrop').directive('lvlDraggable', ['$rootScope', 'uuid', function($rootScope, uuid) {
     return {
         restrict: 'A',
         link: function(scope, el, attrs) {
@@ -80,7 +80,7 @@ module.directive('lvlDraggable', ['$rootScope', 'uuid', function($rootScope, uui
     };
 }]);
 
-module.directive('lvlDropTarget', ['$rootScope', 'uuid', function($rootScope, uuid) {
+angular.module('lvl.directives.dragdrop').directive('lvlDropTarget', ['$rootScope', 'uuid', function($rootScope, uuid) {
     return {
         restrict: 'A',
         scope: {
