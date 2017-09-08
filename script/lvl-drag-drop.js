@@ -94,11 +94,11 @@ angular.module('lvl.directives.dragdrop').directive('lvlDropTarget', ['$rootScop
 
       el.bind(CONSTANTS.DRAG_ENTER, function (e) {
         // this / e.target is the current hover target.
-        angular.element(e.target).addClass('lvl-over');
+        angular.element(el).addClass('lvl-over');
       });
 
       el.bind(CONSTANTS.DRAG_LEAVE, function (e) {
-        angular.element(e.target).removeClass('lvl-over');  // this / e.target is previous target element.
+        angular.element(el).removeClass('lvl-over');  // this / e.target is previous target element.
       });
 
       el.bind(CONSTANTS.DROP, function (e) {
