@@ -53,6 +53,7 @@ angular.module('lvl.directives.dragdrop').directive('lvlDraggable', ['$rootScope
       }
 
       function clear(){
+        el.removeAttr('draggable');
         el.unbind(CONSTANTS.DRAG_START);
         el.unbind(CONSTANTS.DRAG_END);
       }
