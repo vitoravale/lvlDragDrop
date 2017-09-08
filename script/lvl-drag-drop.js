@@ -1,6 +1,6 @@
-angular.module('lvl.directives.dragdrop', ['lvl.services']);
+angular.module('lvl.directives.dragdrop', ['lvl.services', 'lvl.constants']);
 
-angular.module('lvl.directives.dragdrop').directive('lvlDraggable', ['$rootScope', 'uuid', function($rootScope, uuid) {
+angular.module('lvl.directives.dragdrop').directive('lvlDraggable', ['$rootScope', 'uuid', 'CONSTANTS', function($rootScope, uuid, CONSTANTS) {
     return {
         restrict: 'A',
         link: function(scope, el, attrs) {
@@ -16,7 +16,7 @@ angular.module('lvl.directives.dragdrop').directive('lvlDraggable', ['$rootScope
                 angular.element(el).attr('id', id);
             }
 
-            el.bind('dragstart', function(e) {
+            el.bind(CONSTANTS.DRAG_START, function(e) {
                 e.dataTransfer.setData('text', id);
 
                 if (e.stopPropagation) {
@@ -24,12 +24,12 @@ angular.module('lvl.directives.dragdrop').directive('lvlDraggable', ['$rootScope
                 }
 
                 el.addClass('lvl-dragging');
-                $rootScope.$emit('LVL-DRAG-START');
+                $rootScope.$emit(CONSTANTS.LVL_DRAG_START);
             });
 
-            el.bind('dragend', function() {
+            el.bind(CONSTANTS.DRAG_END, function() {
                 el.removeClass('lvl-dragging');
-                $rootScope.$emit('LVL-DRAG-END');
+                $rootScope.$emit(CONSTANTS.LVL_DRAG_END);
             });
 
             el.bind('dragover', function(e) {
@@ -40,11 +40,17 @@ angular.module('lvl.directives.dragdrop').directive('lvlDraggable', ['$rootScope
                 e.dataTransfer.dropEffect = 'move';  // See the section on the DataTransfer object.
                 return false;
             });
+
+            scope.$on('$destroy', function() {
+              el.unbind(CONSTANTS.DRAG_START);
+              el.unbind(CONSTANTS.DRAG_END);
+          });
+
         }
     };
 }]);
 
-angular.module('lvl.directives.dragdrop').directive('lvlDropTarget', ['$rootScope', 'uuid', function($rootScope, uuid) {
+angular.module('lvl.directives.dragdrop').directive('lvlDropTarget', ['$rootScope', 'uuid', 'CONSTANTS', function($rootScope, uuid, CONSTANTS) {
     return {
         restrict: 'A',
         scope: {
@@ -61,7 +67,7 @@ angular.module('lvl.directives.dragdrop').directive('lvlDropTarget', ['$rootScop
                 angular.element(el).attr('id', id);
             }
 
-            el.bind('dragover', function(e) {
+            el.bind(CONSTANTS.DRAG_OVER, function(e) {
                 if (e.preventDefault) {
                     e.preventDefault(); // Necessary. Allows us to drop.
                 }
@@ -70,16 +76,16 @@ angular.module('lvl.directives.dragdrop').directive('lvlDropTarget', ['$rootScop
                 return false;
             });
 
-            el.bind('dragenter', function(e) {
+            el.bind(CONSTANTS.DRAG_ENTER, function(e) {
                 // this / e.target is the current hover target.
                 angular.element(e.target).addClass('lvl-over');
             });
 
-            el.bind('dragleave', function(e) {
+            el.bind(CONSTANTS.DRAG_LEAVE, function(e) {
                 angular.element(e.target).removeClass('lvl-over');  // this / e.target is previous target element.
             });
 
-            el.bind('drop', function(e) {
+            el.bind(CONSTANTS.DROP, function(e) {
                 if (e.preventDefault) {
                     e.preventDefault(); // Necessary. Allows us to drop.
                 }
@@ -92,12 +98,12 @@ angular.module('lvl.directives.dragdrop').directive('lvlDropTarget', ['$rootScop
                 scope.onDrop({dragEl: data, dropEl: id, event: e});
             });
 
-            var dragStartListener = $rootScope.$on('LVL-DRAG-START', function() {
+            var dragStartListener = $rootScope.$on(CONSTANTS.LVL_DRAG_START, function() {
                 var el = document.getElementById(id);
                 angular.element(el).addClass('lvl-target');
             });
 
-            var dragEndListener = $rootScope.$on('LVL-DRAG-END', function() {
+            var dragEndListener = $rootScope.$on(CONSTANTS.LVL_DRAG_END, function() {
                 var el = document.getElementById(id);
                 angular.element(el).removeClass('lvl-target');
                 angular.element(el).removeClass('lvl-over');
@@ -106,6 +112,10 @@ angular.module('lvl.directives.dragdrop').directive('lvlDropTarget', ['$rootScop
             scope.$on('$destroy', function() {
                 dragStartListener();
                 dragEndListener();
+                el.unbind(CONSTANTS.DRAG_OVER);
+                el.unbind(CONSTANTS.DRAG_ENTER);
+                el.unbind(CONSTANTS.DRAG_LEAVE);
+                el.unbind(CONSTANTS.DROP);
             });
         }
     };
